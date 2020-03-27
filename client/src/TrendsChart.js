@@ -1,56 +1,18 @@
 import React, {useState, useEffect} from 'react';
 import { Chart } from 'react-charts';
 import SearchRepeater from './SearchRepeater.js'
-const API = 'api/v1/trends';
-
-async function fetchTermData(term) {
-	
-	let results = await fetch(`${API}?q=${term}`);
-	results = await results.json();
-	
-	let data = results.map(function(dataPoint){
-		return [new Date(dataPoint.time), dataPoint.value];
-	});
-	
-	return data;
-}
-
+import useTermsDataManager from './FetchTermData.js';
 
 export default function TrendsChart() {
 	
-	const [data, setData] = useState([{
-		label: 'Plot 1',
-		data: [[0,1]]
-	}]);
+	const [data, add, remove] = useTermsDataManager();
 	
-	/**
-	 * This function receives an array of terms to search for
-	 * and fetch data for each one of them from the API
-	 * @param {array} termsToSearch 
-	 */
-	async function fetchData(termsToSearch) {
-		let results = await Promise.all(
-			termsToSearch.map(async term => {
-				return {
-					label: term,
-					data: await fetchTermData(term)
-				}
-			})
-		);
-		
-		setData(results);
-	}
-
 	/*const getSeriesStyle = React.useCallback(
 		series => {
 		  console.log(series);
 		},
 		[]
 	)*/
-
-	useEffect(() => {
-		fetchData(['python']);
-	}, [])
 
 	const axes = React.useMemo(
     	() => [
@@ -77,7 +39,7 @@ export default function TrendsChart() {
 				<Chart data={dataMemo} axes={axes}/>
 			</div>
 			<div className="search-terms-controller">
-				<SearchRepeater fetchData={fetchData} />
+				<SearchRepeater addData={add} removeData={remove}/>
 			</div>
 		</div>
 	)

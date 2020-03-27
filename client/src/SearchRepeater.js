@@ -16,14 +16,7 @@ const SearchRepeater = (props) => {
      * @param {string} termToSearch 
      */
     const exists = (termToSearch) => {
-        let exists = false;
-        terms.forEach((term) => {
-            if (term.value === termToSearch) {
-                exists = true;
-                return;
-            }
-        });
-        return exists;
+        return terms.indexOf(termToSearch) == -1 ? false : true;
     }
 
     /**
@@ -34,14 +27,8 @@ const SearchRepeater = (props) => {
         if (!newTerm) {
             return false;
         }
-
         return !exists(term);
     }
-
-    useEffect(() => {
-        console.log(terms);
-        props.fetchData(terms);
-    }, [terms]);
 
     /**
      * Add a new term to the repeater
@@ -50,14 +37,19 @@ const SearchRepeater = (props) => {
         if (!isValid(newTerm)) {
             return;
         }
+        
         const values = [...terms];
         values.push(newTerm)
-        setNewTerm('');
+        
         setTerms(values);
+        props.addData(newTerm);
+        setNewTerm('');
     }
 
     const remove = (idx) => {
         const values = [...terms];
+        const termToRemove = values[idx];
+        props.removeData(termToRemove);
         values.splice(idx, 1);
         setTerms(values);
     }
