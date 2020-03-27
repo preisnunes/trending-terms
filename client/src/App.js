@@ -9,9 +9,6 @@ export default function App() {
 	return (
 		<div className="app">
 			{TrendsChart()}
-			<div className="search-repeater">
-				{SearchRepeater()}
-			</div>
 		</div>
 	)
 	

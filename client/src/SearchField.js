@@ -1,14 +1,14 @@
 import React from 'react';
 
-const SearchField = (props) => {
+const SearchField = ({id, value, remove}) => {
     return (
-        <div id={`search-field-${props.id}`}>
+        <div id={`search-field-${id}`}>
             <input
-                value={props.value}
+                value={value}
                 type="text"
                 readOnly
             />
-            <button type="button" onClick={() => props.remove(props.id)}>Remove</button>
+            <button type="button" onClick={() => remove(id)}>Remove</button>
         </div>
     );
 }

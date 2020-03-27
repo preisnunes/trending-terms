@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import SearchField from './SearchField.js';
 
-const SearchRepeater = () => {
+const SearchRepeater = (props) => {
 
     const [terms, setTerms] = useState([]);
     const [newTerm, setNewTerm] = useState('');
@@ -38,6 +38,11 @@ const SearchRepeater = () => {
         return !exists(term);
     }
 
+    useEffect(() => {
+        console.log(terms);
+        props.fetchData(terms);
+    }, [terms]);
+
     /**
      * Add a new term to the repeater
      */
@@ -46,7 +51,7 @@ const SearchRepeater = () => {
             return;
         }
         const values = [...terms];
-        values.push({value: newTerm})
+        values.push(newTerm)
         setNewTerm('');
         setTerms(values);
     }
@@ -62,7 +67,7 @@ const SearchRepeater = () => {
             <div className="searched-terms">
             {terms.map((term, idx) => {
                 return (
-                    <SearchField id={idx} value={term.value} remove={remove} />
+                    <SearchField id={idx} value={term} remove={remove} />
                 );
             })}
             </div>
