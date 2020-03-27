@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import SearchField from './SearchField.js';
 
-const SearchRepeater = () => {
+const SearchRepeater = (props) => {
 
     const [terms, setTerms] = useState([]);
     const [newTerm, setNewTerm] = useState('');
@@ -16,14 +16,7 @@ const SearchRepeater = () => {
      * @param {string} termToSearch 
      */
     const exists = (termToSearch) => {
-        let exists = false;
-        terms.forEach((term) => {
-            if (term.value === termToSearch) {
-                exists = true;
-                return;
-            }
-        });
-        return exists;
+        return terms.indexOf(termToSearch) == -1 ? false : true;
     }
 
     /**
@@ -34,7 +27,6 @@ const SearchRepeater = () => {
         if (!newTerm) {
             return false;
         }
-
         return !exists(term);
     }
 
@@ -45,14 +37,19 @@ const SearchRepeater = () => {
         if (!isValid(newTerm)) {
             return;
         }
+        
         const values = [...terms];
-        values.push({value: newTerm})
-        setNewTerm('');
+        values.push(newTerm)
+        
         setTerms(values);
+        props.addData(newTerm);
+        setNewTerm('');
     }
 
     const remove = (idx) => {
         const values = [...terms];
+        const termToRemove = values[idx];
+        props.removeData(termToRemove);
         values.splice(idx, 1);
         setTerms(values);
     }
@@ -62,7 +59,7 @@ const SearchRepeater = () => {
             <div className="searched-terms">
             {terms.map((term, idx) => {
                 return (
-                    <SearchField id={idx} value={term.value} remove={remove} />
+                    <SearchField id={idx} value={term} remove={remove} />
                 );
             })}
             </div>
