@@ -1,19 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import { Chart } from 'react-charts';
 import SearchRepeater from './SearchRepeater.js'
-import useTermsDataManager from './FetchTermData.js';
+import useTermsDataManager from '../hooks/FetchTermData.js';
 
 export default function TrendsChart() {
 	
 	const [data, add, remove] = useTermsDataManager();
 	
-	/*const getSeriesStyle = React.useCallback(
-		series => {
-		  console.log(series);
-		},
-		[]
-	)*/
-
 	const axes = React.useMemo(
     	() => [
 			{ primary: true, type: 'time', position: 'bottom'},
