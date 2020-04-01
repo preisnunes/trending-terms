@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 const API = 'api/v1/trends';
 
-async function fetchTermData(term) {
+async function fetchTermData(searchItem) {
 	
-	let results = await fetch(`${API}?q=${term}`);
+	let results = await fetch(`${API}?q=${searchItem.term}&geo=${searchItem.geo}`);
 	results = await results.json();
 	
 	let data = results.map(function(dataPoint){
@@ -35,17 +35,19 @@ export default function useTermsDataManager() {
 		setData(dataTmp);
 	}
 	
-	const add = async (term) => {
-		if (termExists(term)) {
-			return
-		}
-		const termData = await fetchTermData(term);
-		const dataTmp = [...data];
-		dataTmp.push({
-			label: term,
-			data: termData
-		});
-		setData(dataTmp);
+	const add = async (searchItems) => {
+		
+		let newData = await Promise.all(
+			searchItems.map(async item => {
+				let itemData = await fetchTermData(item)
+				return {
+					label: item.getId(),
+					data: itemData
+				}
+			})
+		);
+
+		setData(newData);
 	}
 	
 	return [data, add, remove];
