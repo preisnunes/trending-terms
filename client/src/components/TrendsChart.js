@@ -4,12 +4,13 @@ import useTermsDataManager from '../hooks/FetchTermData.js';
 import SearchItemsContextProvider from '../contexts/SearchItems.js';
 import SearchItemsList from './SearchItems/List.js';
 import NewSearchItem from './SearchItems/New.js';
-
+import SelectTimeSpan from './SelectTimeSpan';
 
 export default function TrendsChart() {
 	
 	const [data, add, remove] = useTermsDataManager();
 	const [isLoading, setIsLoading] = useState(false);
+	const [timeSpan, setTimeSpan] = useState('-1m');
 
 	const axes = React.useMemo(
     	() => [
@@ -45,6 +46,9 @@ export default function TrendsChart() {
 					}}
 			>
 				<Chart data={dataMemo} axes={axes}/>
+			</div>
+			<div className="items-time-window">
+				<SelectTimeSpan span={timeSpan} setSpan={setTimeSpan}/>
 			</div>
 			<div className="items-search-list">	
 				<SearchItemsContextProvider>

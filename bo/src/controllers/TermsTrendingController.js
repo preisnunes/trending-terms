@@ -3,7 +3,7 @@ import googleTrendingService from '../services/trending.js';
 export const getInterestOverTime = async function(req, res){
     try{
         const searchItems = JSON.parse(req.query.items);
-        const timeWindow = req.query.timeWindow;
+        const timeSpan = req.query.span;
     
         let keywords = [];
         let geo = [];

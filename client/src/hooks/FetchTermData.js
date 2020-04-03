@@ -8,10 +8,10 @@ export default function useTermsDataManager() {
 		data: [[0,0]]
 	}]);
 	
-	const fetchItems = async (items) => {
+	const fetchItems = async (items, timeSpan) => {
 		const itemsAsQueryParameter = encodeURI(JSON.stringify(items));
 		
-		const response = await fetch(`${trendsAPI}?items=${itemsAsQueryParameter}`);
+		const response = await fetch(`${trendsAPI}?items=${itemsAsQueryParameter}&span=${timeSpan}`);
 		if (!response.ok) {
 			throw Error('Something happened. It was not possible to load your search!')
 		}
@@ -29,7 +29,7 @@ export default function useTermsDataManager() {
 		return resultsParsed;
 	}
 	
-	const add = async (searchItems) => {
+	const add = async (searchItems, timeSpan) => {
 		let searchResults = await fetchItems(searchItems).catch((err) => {
 			throw err;
 		});
