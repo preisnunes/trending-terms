@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Chart } from 'react-charts';
-import SearchRepeater from './SearchRepeater.js'
 import useTermsDataManager from '../hooks/FetchTermData.js';
+import SearchItemsContextProvider from '../contexts/SearchItems.js';
+import SearchItemsList from '../components/SearchItemsList.js';
+import NewSearchItem from '../components/NewSearchItem.js';
 
 export default function TrendsChart() {
 	
@@ -21,7 +23,7 @@ export default function TrendsChart() {
 	);
 	
 	return (
-		<div className="trends-search">
+		<div id="trends-search-section-1">
 			<div 
 				className="chart" 
 				style={{
@@ -31,9 +33,10 @@ export default function TrendsChart() {
 			>
 				<Chart data={dataMemo} axes={axes}/>
 			</div>
-			<div className="search-terms-controller">
-				<SearchRepeater addData={add} removeData={remove}/>
-			</div>
+			<SearchItemsContextProvider>
+				<NewSearchItem />
+				<SearchItemsList searchTerms={add}/>
+        	</SearchItemsContextProvider>
 		</div>
 	)
 }
