@@ -1,0 +1,23 @@
+{
+  "name": "trending-terms",
+  "description": "Trending Terms",
+  "version": "1.0.0",
+  "main": "./src/server.js",
+  "scripts": {
+    "client": "cd client && yarn start",
+    "server": "nodemon src/server.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "test": "jest"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "google-trends-api": "^4.9.0"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1",
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2"
+  },
+  "type": "module"
+}
