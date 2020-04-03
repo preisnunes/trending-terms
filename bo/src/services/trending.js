@@ -8,7 +8,7 @@ export class GoogleTrending {
 
     /**
      * This method receives an array of keywords and the correspondent country codes
-     * to search for.
+     * to fetch the service API for.
      * @param {array} keywords 
      * @param {array} geo 
      */
