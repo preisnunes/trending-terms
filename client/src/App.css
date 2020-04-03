@@ -9,3 +9,7 @@
 .error {
   border: 1px solid red;
 }
+
+.loading {
+  opacity: 0.5;
+}
