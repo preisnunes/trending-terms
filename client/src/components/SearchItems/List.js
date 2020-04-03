@@ -1,15 +1,16 @@
 import React, {useContext} from 'react';
-import { SearchItemsContext } from '../contexts/SearchItems.js';
-import SearchItem from './SearchItem.js';
+import { SearchItemsContext } from '../../contexts/SearchItems.js';
+import SearchItem from './Item.js';
+import useErrorHandler from '../../hooks/ErrorHandler.js'; 
+import ErrorDisplay from '../ErrorDisplay.js';
 
 const SearchItemsList = ({searchTerms}) => {
 
     const { items } = useContext(SearchItemsContext);
-    
-    const submitSearch = () => {
-        console.log('Submit!');
-        console.log(items);
-        searchTerms(items);
+    const [error, setError] = useErrorHandler();
+
+    const submitSearch = async () => {
+        await searchTerms(items).catch(err => setError(err.message));
     }
 
     return items.length ? (
@@ -18,9 +19,11 @@ const SearchItemsList = ({searchTerms}) => {
                 return (<SearchItem id={idx} item={item} />);
             })}
             <input type="button" onClick={() => submitSearch()} value="Submit Search"></input>
+            <ErrorDisplay error={error} />
         </div>
     ) : (
         <div className="empty-list">There are not any items to search for!!</div>
+        
     );
 }
 

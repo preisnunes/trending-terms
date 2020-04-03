@@ -1,18 +1,18 @@
 import React, {useReducer} from 'react'
 import {render, screen, fireEvent} from '@testing-library/react'
-import {SearchItemsContext} from '../contexts/SearchItems.js';
-import SearchItemsContextProvider from '../contexts/SearchItems.js';
-import NewSearchItem from '../components/NewSearchItem.js';
-import SearchItemsList from '../components/SearchItemsList.js';
-import SearchItem from '../entity/SearchItem.js'; 
-
+import {SearchItemsContext} from '../contexts/SearchItems.js'
+import SearchItemsContextProvider from '../contexts/SearchItems.js'
+import NewSearchItem from '../components/SearchItems/New.js'
+import SearchItemsList from '../components/SearchItems/List.js'
+import SearchItem from '../entity/SearchItem.js'
+import "@babel/polyfill"
 
 test("If there are any search items to search for, a message should be displayed", () => {
     const items = [];
     render(
         <SearchItemsContext.Provider value={{items}}>
             <NewSearchItem />
-            <SearchItemsList />
+            <SearchItemsList searchTerms={() =>{}}/>
         </SearchItemsContext.Provider>
     );
     expect(screen.getByText('There are not any items to search for!!')).toBeDefined();
@@ -25,7 +25,7 @@ test("If there are any search items to search for, the button to submit the sear
     render(
         <SearchItemsContext.Provider value={{items}}>
             <NewSearchItem />
-            <SearchItemsList />
+            <SearchItemsList searchTerms={() =>{}}/>
         </SearchItemsContext.Provider>
     );
     expect(screen.queryByText('Submit Search')).toBe(null);
@@ -34,7 +34,7 @@ test("If there are any search items to search for, the button to submit the sear
 
 test("It is not possible to add a new search item, if there is a equal one in the list", () => {
     
-    const items = [new SearchItem('aaaa', 'us')];
+    const items = [new SearchItem('aaaa', 'US')];
     
     render(
         <SearchItemsContext.Provider value={{items}}>
@@ -46,7 +46,7 @@ test("It is not possible to add a new search item, if there is a equal one in th
     fireEvent.change(term, { target: { value: 'aaaa' } })
 
     const geo = screen.getByLabelText('Geo');
-    fireEvent.change(geo, { target: { value: 'us' } })
+    fireEvent.change(geo, { target: { value: 'US' } })
     
     fireEvent.click(screen.getByText('add search'));
     
@@ -85,7 +85,7 @@ test("Adding an item that is not present in the list, then the search item is ap
     render(
         <SearchItemsContextProvider>
             <NewSearchItem config={{limit: 10}}/>
-            <SearchItemsList />
+            <SearchItemsList searchTerms={() =>{}}/>
         </SearchItemsContextProvider>
     );
     

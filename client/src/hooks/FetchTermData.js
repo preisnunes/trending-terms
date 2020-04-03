@@ -1,54 +1,46 @@
-import { useState, useEffect } from 'react';
-const API = 'api/v1/trends';
-
-async function fetchTermData(searchItem) {
-	
-	let results = await fetch(`${API}?q=${searchItem.term}&geo=${searchItem.geo}`);
-	results = await results.json();
-	
-	let data = results.map(function(dataPoint){
-		return [new Date(dataPoint.time), dataPoint.value];
-	});
-	
-	return data;
-}
+import { useState } from 'react';
+import {trendsAPI} from '../config/defaults.js';
 
 export default function useTermsDataManager() {
 	
-	const [data, setData] = useState([]);
+	const [data, setData] = useState([{
+		label: 'test',
+		data: [[0,0]]
+	}]);
 	
-	const getTermIndex = (term) => {
-		const labels = data.map((dataset) =>{
-			return dataset.label;
+	const fetchItems = async (items) => {
+		const itemsAsQueryParameter = encodeURI(JSON.stringify(items));
+		
+		const response = await fetch(`${trendsAPI}?items=${itemsAsQueryParameter}`);
+		if (!response.ok) {
+			throw Error('Something happened. It was not possible to load your search!')
+		}
+		
+		const results = await response.json();
+		let resultsParsed = Array(items.length).fill().map(()=>Array().fill());
+		results.forEach((result) => {
+			let timestamp = new Date(result.time);
+			let value = result.value;
+			for (let i = 0; i < value.length; ++i) {
+				resultsParsed[i].push([timestamp, value[i]]);
+			}
 		});
-		return labels.indexOf(term)
-	}
-
-	const termExists = (term) => {
-		return getTermIndex(term) >= 0 ? true : false;
-	}
-
-	const remove = (term) => {
-		const index = getTermIndex(term);
-		const dataTmp = [...data];
-		dataTmp.splice(index, 1);
-		setData(dataTmp);
+		
+		return resultsParsed;
 	}
 	
 	const add = async (searchItems) => {
-		
-		let newData = await Promise.all(
-			searchItems.map(async item => {
-				let itemData = await fetchTermData(item)
-				return {
-					label: item.getId(),
-					data: itemData
-				}
-			})
-		);
-
-		setData(newData);
+		let searchResults = await fetchItems(searchItems).catch((err) => {
+			throw err;
+		});
+		const data = searchItems.map((item, idx) => {
+			return {
+				label: item.getId(),
+				data: searchResults[idx]
+			}
+		});
+		setData(data);
 	}
 	
-	return [data, add, remove];
+	return [data, add];
 }

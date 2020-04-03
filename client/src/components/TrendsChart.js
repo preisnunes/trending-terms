@@ -2,13 +2,15 @@ import React, {useState, useEffect} from 'react';
 import { Chart } from 'react-charts';
 import useTermsDataManager from '../hooks/FetchTermData.js';
 import SearchItemsContextProvider from '../contexts/SearchItems.js';
-import SearchItemsList from '../components/SearchItemsList.js';
-import NewSearchItem from '../components/NewSearchItem.js';
+import SearchItemsList from './SearchItems/List.js';
+import NewSearchItem from './SearchItems/New.js';
+
 
 export default function TrendsChart() {
 	
 	const [data, add, remove] = useTermsDataManager();
-	
+	const [isLoading, setIsLoading] = useState(false);
+
 	const axes = React.useMemo(
     	() => [
 			{ primary: true, type: 'time', position: 'bottom'},
@@ -21,11 +23,22 @@ export default function TrendsChart() {
 		() => data,
 		[data]
 	);
+
+	const addData = async (searchItems) => {
+		setIsLoading(true);
+		
+		await add(searchItems).catch((err) => {
+			setIsLoading(false);
+			throw err;
+		});
+		
+		setIsLoading(false);
+	}
 	
 	return (
 		<div id="trends-search-section-1">
 			<div 
-				className="chart" 
+				className={`chart ${isLoading ? 'loading' : ''}`} 
 				style={{
 						width: '800px',
 						height: '600px'
@@ -33,10 +46,12 @@ export default function TrendsChart() {
 			>
 				<Chart data={dataMemo} axes={axes}/>
 			</div>
-			<SearchItemsContextProvider>
-				<NewSearchItem />
-				<SearchItemsList searchTerms={add}/>
-        	</SearchItemsContextProvider>
+			<div className="items-search-list">	
+				<SearchItemsContextProvider>
+					<NewSearchItem />
+					<SearchItemsList searchTerms={addData}/>
+				</SearchItemsContextProvider>
+			</div>
 		</div>
 	)
 }

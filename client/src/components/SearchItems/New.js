@@ -1,17 +1,17 @@
-import React, { useContext, useState } from 'react';
-import { SearchItemsContext } from '../contexts/SearchItems.js';
-import countryList from 'react-select-country-list'
-import SearchItem from '../entity/SearchItem.js';
-import {searchItems as searchItemsConfig} from '../config/defaults.js';
-
-const countriesList = countryList().getData();
+import React, { useContext, useState } from 'react'
+import { SearchItemsContext } from '../../contexts/SearchItems.js'
+import SearchItem from '../../entities/SearchItem.js'
+import {searchItems as searchItemsConfig} from '../../config/defaults.js'
+import useErrorHandler from '../../hooks/ErrorHandler.js' 
+import ErrorDisplay from '../ErrorDisplay.js'
+import SelectGeoField from './SelectGeoField.js'
 
 const NewSearchItemForm = ({config}) => {
     
     const {items, dispatch} = useContext(SearchItemsContext);
     const [term, setTerm] = useState('');
     const [geo, setGeo] = useState('');
-    const [error, setError] = useState({message: null});
+    const [error, setError] = useErrorHandler();
 
     if (config === undefined) {
         config = searchItemsConfig;
@@ -28,18 +28,14 @@ const NewSearchItemForm = ({config}) => {
         return isUnique;
     }
 
-    const setErrorMessage = (message) => {
-        setError({message});
-    } 
-
     const canBeSubmitted = (itemToAdd) => {
         if (items.length == config.limit) {
-            setErrorMessage('You reach the limit of items that you can search for!');
+            setError('You reach the limit of items that you can search for!');
             return false;
         }
 
         if (!isUnique(itemToAdd)) {
-            setErrorMessage('This item search already exists in the list!');
+            setError('This item search already exists in the list!');
             return false;
         }
 
@@ -55,7 +51,7 @@ const NewSearchItemForm = ({config}) => {
         }
         
         dispatch({ type: 'ADD_ITEM', item: itemToAdd});
-        setError({message: null});
+        setError(null);
         setTerm('');
         setGeo('');
     }
@@ -67,16 +63,10 @@ const NewSearchItemForm = ({config}) => {
                     <input type="text" name="term" value={term} onChange={(e) => setTerm(e.target.value)} required/>
                 </label>
                 <label>Geo
-                    <select name="geo" value={geo} onChange={(e) => setGeo(e.target.value)}  >
-                        <option value="">Worldwide</option>
-                        {countriesList.map( country => 
-                            <option value={country.value.toLowerCase()} >{country.label}</option>
-                        )}
-                    </select>
+                    <SelectGeoField geo={geo} setGeo={setGeo}/>
                 </label>
                 <input type="submit" value="add search" />
-                { error.message &&
-                <h3 className="error"> { error.message } </h3> }
+                <ErrorDisplay error={error}/>
             </form>
         </div>
     );

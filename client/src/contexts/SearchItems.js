@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect } from 'react';
+import React, {createContext, useReducer} from 'react';
 import {searchItemReducer} from '../reducers/searchItem.js';
 
 export const SearchItemsContext = createContext();
