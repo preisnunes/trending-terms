@@ -31,7 +31,7 @@ const SearchItemsList = ({searchTerms}) => {
             <ErrorDisplay error={error} />
         </div>
     ) : (
-        <div style={itemsList} className="search-items-list empty">There are not any items to search for!!</div>
+        <div style={itemsList} className="search-items-list empty">No items to search for!</div>
         
     );
 }

@@ -25,12 +25,12 @@ const NewSearchItemForm = ({itemsLimit}) => {
 
     const canBeSubmitted = (itemToAdd) => {
         if (items.length === itemsLimit) {
-            setError('You reach the limit of items that you can search for!');
+            setError('You reach the limit of items that you can search!');
             return false;
         }
 
         if (!isUnique(itemToAdd)) {
-            setError('This item search already exists in the list!');
+            setError('This item already exists in the list!');
             return false;
         }
 
