@@ -2,7 +2,9 @@ import React from 'react';
 
 const ErrorDisplay = ({error}) => {
     return error.message ? (
-        <h3 className="error"> { error.message } </h3> 
+        <div className="error">
+            <h3 > { error.message } </h3> 
+        </div>
     ) : '';
 }   
 

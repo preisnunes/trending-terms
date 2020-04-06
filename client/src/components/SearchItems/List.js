@@ -1,8 +1,13 @@
 import React, {useContext} from 'react';
 import { SearchItemsContext } from '../../contexts/SearchItems.js';
 import SearchItem from './Item.js';
-import useErrorHandler from '../../hooks/ErrorHandler.js'; 
+import useErrorHandler from '../../utils/useErrorHandler.js'; 
 import ErrorDisplay from '../ErrorDisplay.js';
+
+const itemsList = {
+    marginTop: '20px',
+    textAlign: 'center'
+}
 
 const SearchItemsList = ({searchTerms}) => {
 
@@ -10,19 +15,23 @@ const SearchItemsList = ({searchTerms}) => {
     const [error, setError] = useErrorHandler();
 
     const submitSearch = async () => {
-        await searchTerms(items).catch(err => setError(err.message));
+        setError(null);
+        await searchTerms(items).catch((err) => {
+            setError(err.message)
+        });
     }
 
     return items.length ? (
-        <div className="search-items-list">
+        <div style={itemsList} className="search-items-list">
+            
             {items.map((item, idx) => {
                 return (<SearchItem id={idx} item={item} />);
             })}
-            <input type="button" onClick={() => submitSearch()} value="Submit Search"></input>
+            <input style={itemsList} type="button" onClick={() => submitSearch()} value="Submit Search"></input>
             <ErrorDisplay error={error} />
         </div>
     ) : (
-        <div className="empty-list">There are not any items to search for!!</div>
+        <div style={itemsList} className="search-items-list empty">There are not any items to search for!!</div>
         
     );
 }
