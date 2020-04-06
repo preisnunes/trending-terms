@@ -1,11 +1,14 @@
 export class TimeSpanFactory {
 
-    constructor() {
-        this.endTime = new Date();
+    constructor(endTime = undefined) {
+        if (!endTime) {
+            endTime = new Date();
+        }
+        this.endTime = endTime;
     }
 
     get(timeSpanId) {
-        let startTime = new Date();
+        let startTime = new Date(this.endTime.getTime());
         
         switch(timeSpanId) {
             case '-1h':
@@ -32,10 +35,10 @@ export class TimeSpanFactory {
                 lastFiveYears.call(startTime);
                 break;
         }
-
+        
         return {
             startTime,
-            endTime: new Date()
+            endTime: this.endTime
         }
     }
 }

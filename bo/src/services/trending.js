@@ -1,4 +1,5 @@
 import googleTrends from 'google-trends-api';
+import TimeSpanFactory from '../modules/TimeSpan.js';
 
 export class GoogleTrending {
 
@@ -12,13 +13,10 @@ export class GoogleTrending {
      * @param {array} keywords 
      * @param {array} geo 
      */
-    async fetchInterestOverTime(keywords, geo) {
-        const startTime = new Date();
-        startTime.setMonth(startTime.getMonth() - 1);
-        const endTime = new Date();
-
+    async fetchInterestOverTime(keywords, geo, timespanCode) {
+        const timespan = TimeSpanFactory.get(timespanCode);
         const interestOverTime = JSON.parse(await this.service.interestOverTime(
-            {keyword: keywords, startTime, endTime, geo }
+            {keyword: keywords, ...timespan, geo, granularTimeResolution:true }
         ));
         
         const trendingData = interestOverTime['default']['timelineData'];
