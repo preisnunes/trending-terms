@@ -9,8 +9,4 @@ export default function useErrorHandler() {
     }
     
     return [error, setErrorMessage];
-
-    /*return errors.message ? (
-        <h3 className="error"> { error.message } </h3> 
-    ): '';*/
 }
