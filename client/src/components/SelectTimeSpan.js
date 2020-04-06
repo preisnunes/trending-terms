@@ -1,12 +1,15 @@
 import React from 'react';
-import {timeWindows as timeSpansConfig} from '../config/defaults.js';
+import useTimespans from '../utils/useTimespans.js';
+import {timespansAPI} from '../config/defaults.js';
 
 const SelectTimeSpan = ({span, setSpan}) => {
+    const {timespans} = useTimespans(timespansAPI); 
+    
     return (
         <div className="trends-time-span">
-            <select name="timeSpan" value={span} onChange={(e) => setSpan(e.target.value)}  >
-                {timeSpansConfig.map(span => 
-                    <option value={span.id} >{span.name}</option>
+            <select name="timespan" value={span} onChange={(e) => setSpan(e.target.value)}  >
+                {timespans.map(span => 
+                    <option value={span.code} >{span.name}</option>
                 )}
             </select>
         </div> 
