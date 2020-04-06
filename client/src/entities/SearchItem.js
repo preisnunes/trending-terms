@@ -15,7 +15,7 @@ export class SearchItem {
     }
 
     isValid() {
-        return this.term.length == 0 ? false : true;
+        return this.term.length === 0 ? false : true;
     }
 }
 

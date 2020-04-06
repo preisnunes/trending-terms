@@ -3,6 +3,7 @@
   "description": "Trending Terms",
   "version": "1.0.0",
   "main": "./src/server.js",
+  "type": "module",
   "scripts": {
     "client": "cd client && yarn start",
     "server": "nodemon src/server.js",
@@ -15,9 +16,10 @@
     "google-trends-api": "^4.9.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.9.0",
+    "babel-jest": "^25.2.6",
     "concurrently": "^4.0.1",
-    "jest": "^25.1.0",
+    "jest": "^25.2.7",
     "nodemon": "^2.0.2"
-  },
-  "type": "module"
+  }
 }

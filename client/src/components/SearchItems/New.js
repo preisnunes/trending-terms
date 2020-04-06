@@ -1,21 +1,16 @@
 import React, { useContext, useState } from 'react'
 import { SearchItemsContext } from '../../contexts/SearchItems.js'
 import SearchItem from '../../entities/SearchItem.js'
-import {searchItems as searchItemsConfig} from '../../config/defaults.js'
-import useErrorHandler from '../../hooks/ErrorHandler.js' 
+import useErrorHandler from '../../utils/useErrorHandler.js' 
 import ErrorDisplay from '../ErrorDisplay.js'
 import SelectGeoField from './SelectGeoField.js'
 
-const NewSearchItemForm = ({config}) => {
+const NewSearchItemForm = ({itemsLimit}) => {
     
     const {items, dispatch} = useContext(SearchItemsContext);
     const [term, setTerm] = useState('');
     const [geo, setGeo] = useState('');
     const [error, setError] = useErrorHandler();
-
-    if (config === undefined) {
-        config = searchItemsConfig;
-    }
 
     const isUnique = (itemToAdd) => {
         let isUnique = true;
@@ -29,13 +24,13 @@ const NewSearchItemForm = ({config}) => {
     }
 
     const canBeSubmitted = (itemToAdd) => {
-        if (items.length == config.limit) {
-            setError('You reach the limit of items that you can search for!');
+        if (items.length === itemsLimit) {
+            setError('You reach the limit of items that you can search!');
             return false;
         }
 
         if (!isUnique(itemToAdd)) {
-            setError('This item search already exists in the list!');
+            setError('This item already exists in the list!');
             return false;
         }
 
@@ -57,7 +52,7 @@ const NewSearchItemForm = ({config}) => {
     }
 
     return (
-        <div className="add-search-item">
+        <div className="add-search-item-form">
             <form onSubmit={handleSubmit}>
                 <label>Term
                     <input type="text" name="term" value={term} onChange={(e) => setTerm(e.target.value)} required/>
