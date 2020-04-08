@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import { SearchItemsContext } from '../../contexts/SearchItems.js';
 import SearchItem from './Item.js';
 import useErrorHandler from '../../utils/useErrorHandler.js'; 
@@ -10,24 +10,25 @@ const itemsList = {
 }
 
 const SearchItemsList = ({searchTerms}) => {
-
+    console.log(searchTerms);
     const { items } = useContext(SearchItemsContext);
     const [error, setError] = useErrorHandler();
 
-    const submitSearch = async () => {
+    useEffect(() => {
+        async function doTermsSearch() {
+            await searchTerms(items).catch((err) => {
+                setError(err.message)
+            });
+        }
         setError(null);
-        await searchTerms(items).catch((err) => {
-            setError(err.message)
-        });
-    }
+        doTermsSearch();
+    }, [items]);
 
     return items.length ? (
         <div style={itemsList} className="search-items-list">
-            
             {items.map((item, idx) => {
-                return (<SearchItem id={idx} key={item.getId()} item={item} />);
+                return (<SearchItem id={idx} key={item.getId()} item={item}/>);
             })}
-            <input style={itemsList} type="button" onClick={() => submitSearch()} value="Submit Search"></input>
             <ErrorDisplay error={error} />
         </div>
     ) : (
