@@ -9,7 +9,7 @@ const SelectTimeSpan = ({span, setSpan}) => {
         <div className="trends-time-span">
             <select name="timespan" value={span} onChange={(e) => setSpan(e.target.value)}  >
                 {timespans.map(span => 
-                    <option value={span.code} >{span.name}</option>
+                    <option key={span.code} value={span.code} >{span.name}</option>
                 )}
             </select>
         </div> 

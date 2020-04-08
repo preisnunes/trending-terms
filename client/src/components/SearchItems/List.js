@@ -25,7 +25,7 @@ const SearchItemsList = ({searchTerms}) => {
         <div style={itemsList} className="search-items-list">
             
             {items.map((item, idx) => {
-                return (<SearchItem id={idx} item={item} />);
+                return (<SearchItem id={idx} key={item.getId()} item={item} />);
             })}
             <input style={itemsList} type="button" onClick={() => submitSearch()} value="Submit Search"></input>
             <ErrorDisplay error={error} />

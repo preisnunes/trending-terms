@@ -7,9 +7,9 @@ const SelectGeoField = ({geo, setGeo}) => {
 
     return (
         <select name="geo" value={geo} onChange={(e) => setGeo(e.target.value)}  >
-            <option value="">Worldwide</option>
+            <option key="wr" value="">Worldwide</option>
             {countriesList.map(country => 
-                <option value={country.value} >{country.label}</option>
+                <option key={country.value} value={country.value}>{country.label}</option>
             )}
         </select>
     )
